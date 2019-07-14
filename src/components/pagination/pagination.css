@@ -1,0 +1,14 @@
+.navigation {
+    position: relative;
+}
+.pagination__number {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.pagination__number__show {
+    margin-right: 15px;
+}
+.pagination__number .btn {
+    width: 50px;
+}

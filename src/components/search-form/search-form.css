@@ -1,0 +1,20 @@
+.search {
+    display: flex;
+}
+.search__order {
+    width: 200px;
+    height: 40px;
+}
+.search__form-group {
+    flex-grow: 1;
+    display: flex;
+    padding-left: 20px;
+}
+.search__field {
+    width: 100%;
+    margin-right: 20px;
+}
+.search__submit {
+    width: 150px;
+    color: #fff;
+}
