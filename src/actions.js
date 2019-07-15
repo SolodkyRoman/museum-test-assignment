@@ -1,4 +1,4 @@
-const togglePopup = popupItemId => {
+const togglePopup = (popupItemId = null) => {
     return {
         type: 'TOGGLE_POPUP',
         payload: popupItemId
@@ -59,6 +59,33 @@ const changedSorting = type => {
     };
 };
 
+const detailsRequested = (showPopup = false) => {
+    return {
+        type: 'FETCH_DETAILS_REQUEST',
+        payload: showPopup
+    };
+};
+
+const detailsLoaded = (details) => {
+    return {
+        type: 'FETCH_DETAILS_LOADED',
+        payload: details
+    };
+};
+
+const detailsErrored = () => {
+    return {
+        type: 'FETCH_DETAILS_ERROR',
+    };
+};
+
+const tagSelected = tag => {
+    return {
+        type: 'TAG_SELECTED',
+        payload: tag
+    };
+};
+
 export {
     togglePopup,
     collectionRequested,
@@ -68,5 +95,9 @@ export {
     searchSubmitted,
     changedPage,
     changedPerPageNumber,
-    changedSorting
+    changedSorting,
+    detailsRequested,
+    detailsLoaded,
+    detailsErrored,
+    tagSelected
 };

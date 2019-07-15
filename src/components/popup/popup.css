@@ -25,6 +25,7 @@
 .popup__picture {
     width: 50%;
     margin-right: 24px;
+    background: #414141;
 }
 .popup__picture img,
 .popup__picture .placeholder {

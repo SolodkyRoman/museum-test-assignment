@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { 
     togglePopup,
-    popupRequested,
-    popupLoaded
+    detailsRequested,
+    detailsLoaded,
+    detailsErrored
 } from '../../actions';
 import MuseumService from '../../services/museum-service';
 import './popup.css';
@@ -45,33 +46,29 @@ class Popup extends Component {
     };
 
     loadDetails = async (id) => {
+        const { 
+            detailsRequested,
+            detailsLoaded,
+            detailsErrored
+        } = this.props;
         const museumService = new MuseumService();
-        await this.setState({ 
-            loading: true,
-            showPopup: true
-        });
-        const data = await museumService.getDetails(id);
-        this.setState({
-            id: data.id,
-            title: data.title,
-            description: data.description,
-            imageUrl: data.imageUrl,
-            loading: false,
-        });
+        detailsRequested(true);
+        try {
+            const data = await museumService.getDetails(id);
+            detailsLoaded(data);
+        } catch {
+            detailsErrored();
+        }
     };
 
-    componentDidMount() {
-        if (this.props.showPopup) {
-            this.loadDetails(this.props.popupItemId);
-        }
-    }
-
-    async shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
         if (this.props.popupItemId !== nextProps.popupItemId) {
             this.loadDetails(nextProps.popupItemId);
         }
-        if (nextProps.showPopup !== this.state.showPopup) 
-            this.setState({ showPopup: nextProps.showPopup });
+        if (nextProps.detailsError) {
+            const { togglePopup } = this.props;
+            togglePopup(null);
+        }
         return true;
     }
 
@@ -79,16 +76,13 @@ class Popup extends Component {
         const { togglePopup } = this.props;
         const { 
             showPopup,
-            loading,
-            id,
-            title,
-            description,
-            imageUrl 
-        } = this.state;
+            detailsLoading,
+            details
+        } = this.props;
 
         if (!showPopup) return null;
 
-        if (loading) return <PopupPlaceholder togglePopup={togglePopup} />;
+        if (detailsLoading || !details) return <PopupPlaceholder togglePopup={togglePopup} />;
 
         return (
             <div className="popup">
@@ -96,18 +90,18 @@ class Popup extends Component {
                     <div className="popup__info">
                         <div className="popup__picture">
                             <img
-                                src={imageUrl}
-                                alt={title}
+                                src={details.imageUrl}
+                                alt={details.title}
                                 className="popup__image"
                             /> 
                         </div>
                         <div className="popup__text">
-                            <h3>{title}</h3>
-                            {description}
+                            <h3>{details.title}</h3>
+                            {details.description}
                         </div>
                     </div>
                     <div className="popup__actions">
-                        <Link to={`/${id}`} className="btn btn-info btn-lg">View more details</Link>
+                        <Link to={`/${details.id}`} className="btn btn-info btn-lg">View more details</Link>
                         <button className="btn btn-danger btn-lg" onClick={() => togglePopup(null)}>Close</button>
                     </div>
                 </div>
@@ -116,30 +110,33 @@ class Popup extends Component {
     }
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     const { 
         showPopup, 
         popupItemId,
-        popupDetails,
-        popupIsLoading
+        detailsLoading,
+        detailsError,
+        details
     } = state;
     return {
         showPopup,
         popupItemId,
-        popupDetails,
-        popupIsLoading
+        detailsLoading,
+        detailsError,
+        details
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             togglePopup,
-            popupRequested,
-            popupLoaded
+            detailsRequested,
+            detailsLoaded,
+            detailsErrored
         },
         dispatch
     );
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Popup);

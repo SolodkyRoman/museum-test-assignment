@@ -8,7 +8,7 @@
     margin-top: 24px;
 }
 .detailed .column {
-    padding-left: 12px;
+    padding-left: 24px;
     width: 50%;
     display: flex;
     flex-direction: column;
@@ -16,11 +16,17 @@
 }
 .detailed .column:first-child {
     padding-left: 0;
-    padding-right: 12px;
+    padding-right: 24px;
 }
 .detailed__description {
     margin-top: 24px;
 }
 .detailed__tag {
     margin-right: 5px;
+}
+.detailed__loading {
+    height: calc(100vh - 41px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
