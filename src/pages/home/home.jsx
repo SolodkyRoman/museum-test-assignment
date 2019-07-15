@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import SearchForm from '../../components/search-form';
 import Gallery from '../../components/gallery';
 import Pagination from '../../components/pagination';
