@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from '../../pages/home';
 import Detailed from '../../pages/detailed';
-
 import style from './app.module.css';
 
 const App = () => {

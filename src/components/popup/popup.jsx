@@ -62,7 +62,8 @@ class Popup extends Component {
     };
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (this.props.popupItemId !== nextProps.popupItemId) {
+        if (this.props.popupItemId !== nextProps.popupItemId && 
+            nextProps.popupItemId) {
             this.loadDetails(nextProps.popupItemId);
         }
         if (nextProps.detailsError) {

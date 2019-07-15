@@ -18,19 +18,6 @@ const collectionLoaded = collection => {
     };
 };
 
-const popupRequested = () => {
-    return {
-        type: 'FETCH_POPUP_REQUESTED'
-    };
-};
-
-const popupLoaded = details => {
-    return {
-        type: 'FETCH_POPUP_LOADED',
-        payload: details
-    };
-};
-
 const searchSubmitted = value => {
     return {
         type: 'SEARCH_SUBMITTED',
@@ -90,8 +77,6 @@ export {
     togglePopup,
     collectionRequested,
     collectionLoaded,
-    popupRequested,
-    popupLoaded,
     searchSubmitted,
     changedPage,
     changedPerPageNumber,

@@ -15,7 +15,7 @@ const initialState = {
     detailsError: false,
     tagName: '',
     tagSelected: false,
-}
+};
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -43,7 +43,8 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 searchValue: action.payload,
-                galleryIsLoading: true
+                galleryIsLoading: true,
+                activePage: 1
             }
         case 'ACTIVE_PAGE_CHANGED':
             return {
@@ -55,11 +56,13 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 perPage: action.payload,
                 galleryIsUpdating: true,
+                activePage: 1
             };
         case 'SORTNG_CHANGED':
             return {
                 ...state,
-                orderBy: action.payload
+                orderBy: action.payload,
+                activePage: 1
             };
         case 'FETCH_DETAILS_REQUEST':
             return {
@@ -77,6 +80,7 @@ const reducer = (state = initialState, action) => {
         case 'FETCH_DETAILS_ERROR':
             return {
                 ...state,
+                popupItemId: null,
                 detailsError: true
             };
         case 'TAG_SELECTED':
@@ -87,6 +91,7 @@ const reducer = (state = initialState, action) => {
                 showPopup: false,
                 collection: [],
                 galleryIsLoading: true,
+                activePage: 1
             };
         default:
             return state;

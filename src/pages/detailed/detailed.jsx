@@ -18,18 +18,22 @@ const DetailedContent = ({ details, searchByTag }) => (
             <div className="column">
                 <h1 className="h1">{details.title}</h1>
                 <p>
-                    <b>Category:</b> <button className="btn btn-sm btn-link">Sculpture</button>
+                    <b>Category:</b> 
+                    <button
+                        onClick={() => searchByTag(details.category)} 
+                        className="btn btn-sm btn-link">
+                        {details.category}
+                    </button>
                 </p>
                 <p>
-                    <button 
-                        onClick={() => searchByTag('tag 1')}
-                        className="btn btn-sm btn-info detailed__tag">tag 1</button>
-                    <button 
-                        onClick={() => searchByTag('tag 2')}
-                        className="btn btn-sm btn-info detailed__tag">tag 2</button>
-                    <button 
-                        onClick={() => searchByTag('tag 3')}
-                        className="btn btn-sm btn-info detailed__tag">tag 3</button>
+                {
+                    details.tags ? details.tags.map((el, idx) => (
+                        <button 
+                            key={idx}
+                            onClick={() => searchByTag(el)}
+                            className="btn btn-sm btn-info detailed__tag">{el}</button>
+                    )) : null
+                }
                 </p>
             </div>
             <div className="column">

@@ -18,7 +18,9 @@ export default class MuseumService {
       id: data.objectNumber,
       title: data.title,
       description: data.label.description || data.description,
-      imageUrl: data.webImage.url
+      imageUrl: data.webImage.url,
+      tags: data.materials,
+      category: data.objectTypes[0]
     };
   };
 
@@ -44,13 +46,11 @@ export default class MuseumService {
       const res = await fetch(
         `${this._apiBase}collection/${objectId}?${this._apiParams}`
       );
-
+      
       if (res.status !== 200) {
         throw new Error('Something went wrong.');
       }
-
       const data = await res.json();
-      console.log(data);
       return this._transformDetails(data.artObject);
     } catch {
       throw new Error();
