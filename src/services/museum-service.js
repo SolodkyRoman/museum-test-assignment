@@ -1,69 +1,46 @@
-const API_KEY = '';
-const API_URL = '';
-
 export default class MuseumService {
-    collectionsData = [
-        {   
-            title: `Title`,
-            longTitle: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
-                non alias, assumenda fugit inventore cupiditate eum error distinctio
-                incidunt quis iste pariatur quaerat ad aperiam, cumque est totam.
-                Laboriosam cupiditate beatae debitis ipsam aliquid doloremque deleniti
-                id nulla, voluptate eaque quos soluta, dolor omnis eius recusandae
-                dolorem similique illo? Labore excepturi dolores, dolorum minima
-                debitis suscipit non accusamus ratione odio veritatis autem in quos
-                reiciendis iusto nulla quae a quaerat repudiandae nostrum quo placeat
-                deserunt nihil est! Aliquam debitis voluptate, deserunt deleniti esse
-                iste incidunt saepe non suscipit magni. Atque possimus qui blanditiis
-                rerum obcaecati odio beatae voluptate vero quaerat!`,
-            imageUrl: `http://lh6.ggpht.com/wwx2vAS9DzFmmyeZefPjMtmCNOdjD80gvkXJcylloy40SiZOhdLHVddEZLBHtymHu53TcvqJLYZfZF7M-uvoMmG_wSI=s0`
-        },
-        {
-            title: `Title 2`,
-            longTitle: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
-                non alias, assumenda fugit inventore cupiditate eum error distinctio
-                incidunt quis iste pariatur quaerat ad aperiam, cumque est totam.
-                Laboriosam cupiditate beatae debitis ipsam aliquid doloremque deleniti
-                id nulla, voluptate eaque quos soluta, dolor omnis eius recusandae
-                dolorem similique illo? Labore excepturi dolores, dolorum minima
-                debitis suscipit non accusamus ratione odio veritatis autem in quos
-                reiciendis iusto nulla quae a quaerat repudiandae nostrum quo placeat
-                deserunt nihil est! Aliquam debitis voluptate, deserunt deleniti esse
-                iste incidunt saepe non suscipit magni. Atque possimus qui blanditiis
-                rerum obcaecati odio beatae voluptate vero quaerat!`,
-            imageUrl: `http://lh6.ggpht.com/wwx2vAS9DzFmmyeZefPjMtmCNOdjD80gvkXJcylloy40SiZOhdLHVddEZLBHtymHu53TcvqJLYZfZF7M-uvoMmG_wSI=s0`
-        },
-        {
-            longTitle: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
-                non alias, assumenda fugit inventore cupiditate eum error distinctio
-                incidunt quis iste pariatur quaerat ad aperiam, cumque est totam.
-                Laboriosam cupiditate beatae debitis ipsam aliquid doloremque deleniti
-                id nulla, voluptate eaque quos soluta, dolor omnis eius recusandae
-                dolorem similique illo? Labore excepturi dolores, dolorum minima
-                debitis suscipit non accusamus ratione odio veritatis autem in quos
-                reiciendis iusto nulla quae a quaerat repudiandae nostrum quo placeat
-                deserunt nihil est! Aliquam debitis voluptate, deserunt deleniti esse
-                iste incidunt saepe non suscipit magni. Atque possimus qui blanditiis
-                rerum obcaecati odio beatae voluptate vero quaerat!`,
-            imageUrl: `http://lh6.ggpht.com/wwx2vAS9DzFmmyeZefPjMtmCNOdjD80gvkXJcylloy40SiZOhdLHVddEZLBHtymHu53TcvqJLYZfZF7M-uvoMmG_wSI=s0`
-        },
-        {
-            longTitle: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
-                non alias, assumenda fugit inventore cupiditate eum error distinctio
-                incidunt quis iste pariatur quaerat ad aperiam, cumque est totam.
-                Laboriosam cupiditate beatae debitis ipsam aliquid doloremque deleniti
-                id nulla, voluptate eaque quos soluta, dolor omnis eius recusandae
-                dolorem similique illo? Labore excepturi dolores, dolorum minima
-                debitis suscipit non accusamus ratione odio veritatis autem in quos
-                reiciendis iusto nulla quae a quaerat repudiandae nostrum quo placeat
-                deserunt nihil est! Aliquam debitis voluptate, deserunt deleniti esse
-                iste incidunt saepe non suscipit magni. Atque possimus qui blanditiis
-                rerum obcaecati odio beatae voluptate vero quaerat!`,
-            imageUrl: `http://lh6.ggpht.com/wwx2vAS9DzFmmyeZefPjMtmCNOdjD80gvkXJcylloy40SiZOhdLHVddEZLBHtymHu53TcvqJLYZfZF7M-uvoMmG_wSI=s0`
-        },
-    ];
+    _apiParams = 'key=8Y1mYOsg&format=json&imgonly=true';
+    _apiBase = 'https://www.rijksmuseum.nl/api/en/';
 
-    getMuseums = () => {
-        return this.collectionsData;
+    _transformCollection = (data) => {
+        const collection = data.map(item => {
+            return {
+                id: item.objectNumber,
+                title: item.longTitle,
+                imageUrl: item.webImage.url
+            };
+        });
+        return collection;
+    };
+
+    _transformDetails = (data) => {
+        return {
+            id: data.objectNumber,
+            title: data.label.title,
+            description: data.label.description,
+            imageUrl: data.webImage.url
+        };
+    };
+
+    getCollection = async (perPage, activePage, orderBy) => {
+        const res = await fetch(`${this._apiBase}collection?ps=${perPage}&p=${activePage}&s=${orderBy}&${this._apiParams}`)
+        
+        if (res.status !== 200) {
+           throw new Error('Something went wrong.');
+        }
+
+        const data = await res.json();
+        return this._transformCollection(data.artObjects);
+    };
+
+    getDetails = async (objectId) => {
+        const res = await fetch(`${this._apiBase}collection/${objectId}?${this._apiParams}`);
+
+        if (res.status !== 200) {
+            throw new Error('Something went wrong.');
+         }
+ 
+         const data = await res.json();
+         return this._transformDetails(data.artObject);
     };
 }

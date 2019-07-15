@@ -1,43 +1,14 @@
 import { createStore } from 'redux';
 
 const initialState = {
-    search: '',
-    museumsCollection: [
-        {   
-            id: 'id-1',
-            title: `Title 1`,
-            longTitle: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
-                non alias, assumenda fugit inventore cupiditate eum error distinctio
-                incidunt quis iste pariatur quaerat ad aperiam, cumque est totam.
-                Laboriosam cupiditate beatae debitis ipsam aliquid doloremque deleniti
-                id nulla, voluptate eaque quos soluta, dolor omnis eius recusandae
-                dolorem similique illo? Labore excepturi dolores, dolorum minima
-                debitis suscipit non accusamus ratione odio veritatis autem in quos
-                reiciendis iusto nulla quae a quaerat repudiandae nostrum quo placeat
-                deserunt nihil est! Aliquam debitis voluptate, deserunt deleniti esse
-                iste incidunt saepe non suscipit magni. Atque possimus qui blanditiis
-                rerum obcaecati odio beatae voluptate vero quaerat!`,
-            imageUrl: `http://lh6.ggpht.com/wwx2vAS9DzFmmyeZefPjMtmCNOdjD80gvkXJcylloy40SiZOhdLHVddEZLBHtymHu53TcvqJLYZfZF7M-uvoMmG_wSI=s0`
-        },
-        {
-            id: 'id-2',
-            title: `Title 2`,
-            longTitle: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum
-                non alias, assumenda fugit inventore cupiditate eum error distinctio
-                incidunt quis iste pariatur quaerat ad aperiam, cumque est totam.
-                Laboriosam cupiditate beatae debitis ipsam aliquid doloremque deleniti
-                id nulla, voluptate eaque quos soluta, dolor omnis eius recusandae
-                dolorem similique illo? Labore excepturi dolores, dolorum minima
-                debitis suscipit non accusamus ratione odio veritatis autem in quos
-                reiciendis iusto nulla quae a quaerat repudiandae nostrum quo placeat
-                deserunt nihil est! Aliquam debitis voluptate, deserunt deleniti esse
-                iste incidunt saepe non suscipit magni. Atque possimus qui blanditiis
-                rerum obcaecati odio beatae voluptate vero quaerat!`,
-            imageUrl: `http://lh6.ggpht.com/wwx2vAS9DzFmmyeZefPjMtmCNOdjD80gvkXJcylloy40SiZOhdLHVddEZLBHtymHu53TcvqJLYZfZF7M-uvoMmG_wSI=s0`
-        },
-    ],
+    museumsCollection: [],
     showPopup: false,
     popupItemId: null,
+    galleryIsLoading: true,
+    orderBy: '',
+    searchValue: null,
+    activePage: 1,
+    perPage: 10,
 }
 
 const reducer = (state = initialState, action) => {
@@ -47,6 +18,38 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 showPopup: !state.showPopup,
                 popupItemId: action.payload || state.popupItemId
+            };
+        case 'FETCH_COLLECTION_REQUEST':
+            return {
+                ...state,
+                galleryIsLoading: true
+            };
+        case 'FETCH_COLLECTION_LOADED':
+            return {
+                ...state,
+                museumsCollection: action.payload,
+                galleryIsLoading: false
+            }
+        case 'SEARCH_SUBMITTED':
+            return {
+                ...state,
+                searchValue: action.payload
+            }
+        case 'ACTIVE_PAGE_CHANGED':
+            return {
+                ...state,
+                activePage: action.payload
+            };
+        case 'NUMBER_PERPAGE_CHANGED':
+            console.log(action.payload)
+            return {
+                ...state,
+                perPage: action.payload
+            };
+        case 'SORTNG_CHANGED':
+            return {
+                ...state,
+                orderBy: action.payload
             };
         default:
             return state;

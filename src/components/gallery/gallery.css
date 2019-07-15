@@ -1,8 +1,14 @@
 .gallery {
     padding: 0;
     margin: 40px 0;
+    min-height: calc(100vh - 240px);
     display: flex;
     flex-wrap: wrap;
+}
+.spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .gallery__item {
    margin: 0 12px 24px 12px;
@@ -25,10 +31,13 @@
     z-index: 1;
     transition: all 0.2s;
 }
-.gallery__image {
+.gallery__image, .gallery__image-placeholder {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+.gallery__image-placeholder {
+    background: #eee;
 }
 .gallery__item:hover .gallery__description {
     opacity: 1;
